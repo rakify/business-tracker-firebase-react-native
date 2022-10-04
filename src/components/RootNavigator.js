@@ -35,7 +35,7 @@ const RootNavigator = () => {
               component={user.isFetching ? LoadingScreen : Register}
             />
           </Tab.Group>
-        ) : !user.currentUser.members ? (
+        ) : !user.currentUser.customers ? (
           <Tab.Screen name="UpdateUser" component={UpdateUser} options={{}} />
         ) : (
           <Tab.Group>

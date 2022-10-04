@@ -36,17 +36,42 @@ export default function UpdateUser() {
   };
 
   const handleSubmit = () => {
-    let customers = [];
+    let customers = [
+      {
+        mapValue: {
+          fields: {
+            name: {stringValue: inputs.name},
+            address: {stringValue: inputs.address},
+            phoneNumber: {stringValue: inputs.phoneNumber},
+          },
+        },
+      },
+    ];
+    let products = [
+      {
+        mapValue: {
+          fields: {
+            name: {stringValue: inputs.pname},
+            price: {stringValue: inputs.price},
+            unit: {stringValue: inputs.unit},
+          },
+        },
+      },
+    ];
     const updatedUser = {
       uid: {stringValue: user.uid['stringValue']},
+      shopName: {stringValue: inputs.shopName},
       adminKey: {stringValue: inputs.key},
-      customers: [
-        {
-          name: {stringValue: inputs.name},
-          address: {stringValue: inputs.address},
-          phoneNumber: {stringValue: inputs.phoneNumber},
+      customers: {
+        arrayValue: {
+          values: customers,
         },
-      ],
+      },
+      products: {
+        arrayValue: {
+          values: products,
+        },
+      },
     };
     updateUserData(updatedUser).then(res =>
       Alert.alert('Success', 'User updated successfully.'),

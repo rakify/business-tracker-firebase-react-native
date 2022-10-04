@@ -28,7 +28,7 @@ import {
 } from './entryRedux';
 import axios from 'axios';
 import {auth, db} from '../config/firebaseConfig';
-import { doc, setDoc } from 'firebase/firestore';
+import {doc, setDoc} from 'firebase/firestore';
 
 export const createUserData = async user => {
   const url = `https://firestore.googleapis.com/v1/projects/business-33109/databases/(default)/documents/users/?documentId=${user.uid['stringValue']}`;
@@ -43,31 +43,18 @@ export const createUserData = async user => {
 };
 
 export const updateUserData = async user => {
+  const url = `https://firestore.googleapis.com/v1/projects/business-33109/databases/(default)/documents/users/${user.uid['stringValue']}?updateMask.fieldPaths=adminKey&updateMask.fieldPaths=shopName&updateMask.fieldPaths=customers&updateMask.fieldPaths=products`;
   try {
-    const res = await setDoc(doc(db, "users", "LA"), {
-      name: "Los Angeles",
-      state: "CA",
-      country: "USA"
+    const res = await axios.patch(url, {
+      fields: user,
     });
+    console.log(res.data);
     return res.data;
   } catch (err) {
     console.log(err.message);
     return err.code;
   }
 };
-
-// export const updateUserData = async user => {
-//   const url = `https://firestore.googleapis.com/v1/projects/business-33109/databases/(default)/documents/users/${user.uid['stringValue']}?updateMask.fieldPaths=adminKey`;
-//   try {
-//     const res = await axios.patch(url, {
-//       fields: user,
-//     });
-//     return res.data;
-//   } catch (err) {
-//     console.log(err.message);
-//     return err.code;
-//   }
-// };
 
 export const getUserData = async (dispatch, uid) => {
   dispatch(loginStart());
