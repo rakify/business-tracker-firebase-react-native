@@ -37,9 +37,9 @@ const Header = () => {
       )}
       {user && (
         <>
-          <View style={styles.user}>
-            <Text style={styles.text}>Meal Tracker</Text>
-          </View>
+          {/* <View style={styles.user}>
+            <Text style={styles.text}>Business Tracker</Text>
+          </View> */}
           <View style={styles.subbody}>
             <View>
               <Text>Today is {month + ' ' + date + ', ' + year}</Text>

@@ -4,8 +4,6 @@ import {View, StyleSheet, TextInput, Alert, Text, Button} from 'react-native';
 import Header from '../components/Header';
 import {signInWithEmailAndPassword} from 'firebase/auth';
 import {auth} from '../config/firebaseConfig';
-//to check if the user has document or new
-import {doc, updateDoc} from 'firebase/firestore';
 import {getUserData} from '../redux/apiCalls';
 
 const Login = () => {

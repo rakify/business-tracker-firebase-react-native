@@ -8,6 +8,7 @@ import {useSelector} from 'react-redux';
 // import Calculation from './../pages/Calculation';
 import LoadingScreen from './LoadingScreen';
 import Register from '../pages/Register';
+import UpdateUser from '../pages/UpdateUser';
 // import UpdateUser from '../pages/UpdateUser';
 // import UpdateKey from './../pages/UpdateKey';
 
@@ -15,12 +16,12 @@ const Tab = createBottomTabNavigator();
 
 const RootNavigator = () => {
   const user = useSelector(state => state.user);
-  
+
   return (
     <NavigationContainer>
       <Tab.Navigator
         screenOptions={{
-          headerShown: false,
+          headerShown: true,
           tabBarHideOnKeyboard: true,
         }}>
         {!user.currentUser ? (
@@ -34,6 +35,8 @@ const RootNavigator = () => {
               component={user.isFetching ? LoadingScreen : Register}
             />
           </Tab.Group>
+        ) : !user.currentUser.members ? (
+          <Tab.Screen name="UpdateUser" component={UpdateUser} options={{}} />
         ) : (
           <Tab.Group>
             <Tab.Screen name="Home" component={Home} />
