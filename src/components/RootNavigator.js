@@ -9,6 +9,9 @@ import {useSelector} from 'react-redux';
 import LoadingScreen from './LoadingScreen';
 import Register from '../pages/Register';
 import UpdateUser from '../pages/UpdateUser';
+import Customers from '../pages/Customers';
+import Products from '../pages/Products';
+import {Settings} from '../pages/Settings';
 // import UpdateUser from '../pages/UpdateUser';
 // import UpdateKey from './../pages/UpdateKey';
 
@@ -35,11 +38,12 @@ const RootNavigator = () => {
               component={user.isFetching ? LoadingScreen : Register}
             />
           </Tab.Group>
-        ) : !user.currentUser.customers ? (
-          <Tab.Screen name="UpdateUser" component={UpdateUser} options={{}} />
         ) : (
           <Tab.Group>
             <Tab.Screen name="Home" component={Home} />
+            <Tab.Screen name="Customers" component={Customers} />
+            <Tab.Screen name="Products" component={Products} />
+            <Tab.Screen name="Settings" component={Settings} />
           </Tab.Group>
         )}
       </Tab.Navigator>

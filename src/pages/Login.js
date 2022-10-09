@@ -4,7 +4,7 @@ import {View, StyleSheet, TextInput, Alert, Text, Button} from 'react-native';
 import Header from '../components/Header';
 import {signInWithEmailAndPassword} from 'firebase/auth';
 import {auth} from '../config/firebaseConfig';
-import {getUserData} from '../redux/apiCalls';
+import {getUserData, login} from '../redux/apiCalls';
 
 const Login = () => {
   const user = useSelector(state => state.user);
@@ -20,6 +20,7 @@ const Login = () => {
         getUserData(dispatch, credential.user.uid);
       })
       .catch(error => {
+        console.log(error);
         Alert.alert(
           error.code === 'auth/invalid-email'
             ? 'Invalid email.'
@@ -56,7 +57,7 @@ const Login = () => {
         <Button
           title={user.isFetching ? 'Wait..' : 'Login'}
           color="#1eb900"
-          onPress={LoginHandler}
+          onPress={() => LoginHandler()}
         />
       </View>
     </>

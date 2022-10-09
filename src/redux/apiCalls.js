@@ -27,43 +27,80 @@ import {
   addEntriesFailure,
 } from './entryRedux';
 import axios from 'axios';
-import {auth, db} from '../config/firebaseConfig';
-import {doc, setDoc} from 'firebase/firestore';
+import {auth} from '../config/firebaseConfig';
+import {Alert} from 'react-native';
+const API_KEY = 'AIzaSyA0R6yc4I5Qf7szfOl0_MwJLR3DGFavieI';
 
 export const createUserData = async user => {
-  const url = `https://firestore.googleapis.com/v1/projects/business-33109/databases/(default)/documents/users/?documentId=${user.uid['stringValue']}`;
+  const url = `https://firestore.googleapis.com/v1/projects/business-33109/databases/(default)/documents/users/?documentId=${user.uid.stringValue}`;
   try {
     const res = await axios.post(url, {
       fields: user,
     });
-    console.log(res.data);
   } catch (err) {
     console.log(err.message);
   }
 };
 
-export const updateUserData = async user => {
-  const url = `https://firestore.googleapis.com/v1/projects/business-33109/databases/(default)/documents/users/${user.uid['stringValue']}?updateMask.fieldPaths=adminKey&updateMask.fieldPaths=shopName&updateMask.fieldPaths=customers&updateMask.fieldPaths=products`;
+export const updateUserData = async (dispatch, user) => {
+  dispatch(updateUserStart());
+  const url = `https://firestore.googleapis.com/v1/projects/business-33109/databases/(default)/documents/users/${user.uid.stringValue}?updateMask.fieldPaths=adminKey&updateMask.fieldPaths=shopName&updateMask.fieldPaths=customers&updateMask.fieldPaths=products`;
   try {
     const res = await axios.patch(url, {
       fields: user,
     });
-    console.log(res.data);
-    return res.data;
+    dispatch(updateUserSuccess(res.data.fields));
+    Alert.alert('', 'Updated Successfully!', [], {
+      cancelable: true,
+    });
   } catch (err) {
-    console.log(err.message);
-    return err.code;
+    dispatch(updateUserFailure());
+    Alert.alert('Error', `Failed. ${err.message}`);
+  }
+};
+
+export const updateUserCustomersData = async (dispatch, user) => {
+  dispatch(updateUserStart());
+  const url = `https://firestore.googleapis.com/v1/projects/business-33109/databases/(default)/documents/users/${user.uid.stringValue}?updateMask.fieldPaths=customers`;
+  try {
+    const res = await axios.patch(url, {
+      fields: user,
+    });
+    dispatch(updateUserSuccess(res.data.fields));
+    Alert.alert('', 'Updated Successfully!', [], {
+      cancelable: true,
+    });
+  } catch (err) {
+    dispatch(updateUserFailure());
+    Alert.alert('Error', `Failed. ${err.message}`);
+  }
+};
+
+export const updateUserProductsData = async (dispatch, user) => {
+  dispatch(updateUserStart());
+  const url = `https://firestore.googleapis.com/v1/projects/business-33109/databases/(default)/documents/users/${user.uid.stringValue}?updateMask.fieldPaths=products`;
+  try {
+    const res = await axios.patch(url, {
+      fields: user,
+    });
+    dispatch(updateUserSuccess(res.data.fields));
+    Alert.alert('', 'Updated Successfully!', [], {
+      cancelable: true,
+    });
+  } catch (err) {
+    dispatch(updateUserFailure());
+    Alert.alert('Error', `Failed. ${err.message}`);
   }
 };
 
 export const getUserData = async (dispatch, uid) => {
-  dispatch(loginStart());
+  dispatch(getUserStart());
   const url = `https://firestore.googleapis.com/v1/projects/business-33109/databases/(default)/documents/users/${uid}`;
   try {
     const res = await axios.get(url);
-    dispatch(loginSuccess(res.data.fields));
+    dispatch(getUserSuccess(res.data.fields));
   } catch (err) {
-    dispatch(loginFailure());
+    dispatch(getUserFailure());
     console.log(err);
   }
 };
@@ -71,8 +108,10 @@ export const logout = async dispatch => {
   dispatch(logoutStart());
   try {
     await auth.signOut();
+    console.log(1);
     dispatch(logoutSuccess());
   } catch (err) {
+    console.log(err);
     dispatch(logoutFailure());
   }
 };

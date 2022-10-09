@@ -23,10 +23,29 @@ const Register = () => {
         .then(credential => {
           if (credential && credential.user) {
             createUserData({
+              // user model
               email: {stringValue: credential.user.email},
               uid: {stringValue: credential.user.uid},
               username: {stringValue: username},
               phoneNumber: {stringValue: phoneNumber},
+              customers: {
+                arrayValue: {
+                  values: [],
+                },
+              },
+              products: {
+                arrayValue: {
+                  values: [],
+                },
+              },
+              shopName: {stringValue: ''},
+              shopAddress: {stringValue: ''},
+              shopBanner: {stringValue: ''},
+              shopDetails: {stringValue: ''},
+              shopOfficePn: {stringValue: ''},
+              shopOtherPn: {stringValue: ''},
+              shopSignature: {stringValue: ''},
+              admin_key: {stringValue: ''},
             }).then(Alert.alert('Account created successfully!'));
           }
         })

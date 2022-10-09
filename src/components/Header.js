@@ -1,7 +1,8 @@
 import React from 'react';
-import {View, Text, Image, StyleSheet, Pressable, Alert} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {logout} from '../redux/apiCalls';
+import Button from '../utils/Button';
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -30,26 +31,22 @@ const Header = () => {
 
   return (
     <>
-      {!user && (
-        <View style={styles.user}>
-          <Text style={styles.text}>Business Tracker</Text>
-        </View>
-      )}
       {user && (
         <>
-          {/* <View style={styles.user}>
-            <Text style={styles.text}>Business Tracker</Text>
-          </View> */}
-          <View style={styles.subbody}>
-            <View>
-              <Text>Today is {month + ' ' + date + ', ' + year}</Text>
-            </View>
-            <View style={styles.right}>
-              {/* <Text>{user?.username} </Text> */}
-              <Pressable onPress={clearAll}>
-                <Text style={{color: 'red'}}>(Logout)</Text>
-              </Pressable>
-            </View>
+          <View style={styles.body}>
+            <Text style={{color: 'green'}}>
+              Today is {month + ' ' + date + ', ' + year}
+            </Text>
+            <Button
+              onPressFunction={clearAll}
+              style={{
+                backgroundColor: 'red',
+                height: 20,
+                width: 60,
+                marginTop: 0,
+              }}
+              title="Logout"
+            />
           </View>
         </>
       )}
@@ -58,31 +55,17 @@ const Header = () => {
 };
 
 const styles = StyleSheet.create({
-  imageView: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f8f8f8',
-    paddingBottom: 20,
-  },
-  image: {
-    width: 300,
-    height: 220,
-  },
-  user: {
-    backgroundColor: '#87CEEB',
-    height: 30,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   text: {
     fontSize: 25,
     color: 'white',
     fontWeight: '500',
   },
-  subbody: {
+  body: {
     height: 20,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    paddingRight: 5,
+    paddingLeft: 5,
   },
   right: {
     flexDirection: 'row',

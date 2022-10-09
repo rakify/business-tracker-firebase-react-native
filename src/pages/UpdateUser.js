@@ -1,4 +1,4 @@
-import {useSelector, useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import React, {useState} from 'react';
 import {
   View,
@@ -7,13 +7,13 @@ import {
   TextInput,
   ScrollView,
   Alert,
+  Button,
 } from 'react-native';
-import Button from '../utils/Button';
 import Header from '../components/Header';
 import {updateUserData} from '../redux/apiCalls';
-import {auth} from '../config/firebaseConfig';
 
 export default function UpdateUser() {
+  const dispatch = useDispatch();
   const user = useSelector(state => state.user.currentUser);
   const [next, setNext] = useState();
   const [inputs, setInputs] = useState({
@@ -43,6 +43,7 @@ export default function UpdateUser() {
             name: {stringValue: inputs.name},
             address: {stringValue: inputs.address},
             phoneNumber: {stringValue: inputs.phoneNumber},
+            note: {stringValue: inputs.note},
           },
         },
       },
@@ -52,14 +53,14 @@ export default function UpdateUser() {
         mapValue: {
           fields: {
             name: {stringValue: inputs.pname},
-            price: {stringValue: inputs.price},
+            price: {doubleValue: inputs.price},
             unit: {stringValue: inputs.unit},
           },
         },
       },
     ];
     const updatedUser = {
-      uid: {stringValue: user.uid['stringValue']},
+      uid: {stringValue: user.uid.stringValue},
       shopName: {stringValue: inputs.shopName},
       adminKey: {stringValue: inputs.key},
       customers: {
@@ -73,7 +74,7 @@ export default function UpdateUser() {
         },
       },
     };
-    updateUserData(updatedUser).then(res =>
+    updateUserData(dispatch, updatedUser).then(res =>
       Alert.alert('Success', 'User updated successfully.'),
     );
   };
@@ -244,8 +245,7 @@ export default function UpdateUser() {
             <Button
               style={{alignSelf: 'center'}}
               title={'Update'}
-              color="#1eb900"
-              onPressFunction={handleSubmit}
+              onPress={handleSubmit}
             />
           </>
         )}
