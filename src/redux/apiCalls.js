@@ -44,7 +44,7 @@ export const createUserData = async user => {
 
 export const updateUserData = async (dispatch, user) => {
   dispatch(updateUserStart());
-  const url = `https://firestore.googleapis.com/v1/projects/business-33109/databases/(default)/documents/users/${user.uid.stringValue}?updateMask.fieldPaths=adminKey&updateMask.fieldPaths=shopName&updateMask.fieldPaths=customers&updateMask.fieldPaths=products`;
+  const url = `https://firestore.googleapis.com/v1/projects/business-33109/databases/(default)/documents/users/${user.uid.stringValue}?updateMask.fieldPaths=shopName&updateMask.fieldPaths=shopDetails&updateMask.fieldPaths=shopAddress&updateMask.fieldPaths=shopOfficePn&updateMask.fieldPaths=shopOtherPn&updateMask.fieldPaths=shopSignature&updateMask.fieldPaths=shopBanner`;
   try {
     const res = await axios.patch(url, {
       fields: user,
@@ -101,14 +101,13 @@ export const getUserData = async (dispatch, uid) => {
     dispatch(getUserSuccess(res.data.fields));
   } catch (err) {
     dispatch(getUserFailure());
-    console.log(err);
+    Alert.alert('Connection Lost', `Failed. ${err.message}`);
   }
 };
 export const logout = async dispatch => {
   dispatch(logoutStart());
   try {
     await auth.signOut();
-    console.log(1);
     dispatch(logoutSuccess());
   } catch (err) {
     console.log(err);

@@ -38,20 +38,29 @@ const Register = () => {
                   values: [],
                 },
               },
-              shopName: {stringValue: ''},
-              shopAddress: {stringValue: ''},
+              shopName: {stringValue: 'Demo Bread & Buiscuits Factory'},
+              shopAddress: {stringValue: 'Demo, Dhaka'},
               shopBanner: {stringValue: ''},
-              shopDetails: {stringValue: ''},
-              shopOfficePn: {stringValue: ''},
-              shopOtherPn: {stringValue: ''},
+              shopDetails: {
+                stringValue: 'Demo details: We sell buiscuits and bread etc',
+              },
+              shopOfficePn: {stringValue: '+8801'},
+              shopOtherPn: {stringValue: '+8801'},
               shopSignature: {stringValue: ''},
-              admin_key: {stringValue: ''},
-            }).then(Alert.alert('Account created successfully!'));
+            }).then(
+              Alert.alert(
+                '',
+                'Account created successfully! You may login now.',
+                [],
+                {cancelable: true},
+              ),
+            );
           }
         })
         .catch(error => {
           console.log(error.code);
           Alert.alert(
+            'Error',
             error.code === 'auth/invalid-email'
               ? 'Invalid email.'
               : error.code === 'auth/email-already-in-use'
@@ -59,6 +68,10 @@ const Register = () => {
               : error.code === 'auth/weak-password'
               ? 'Password must contain at least 6 characters.'
               : 'Network error.',
+            [],
+            {
+              cancelable: true,
+            },
           );
         });
   };

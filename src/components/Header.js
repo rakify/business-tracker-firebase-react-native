@@ -28,9 +28,13 @@ const Header = () => {
   const clearAll = () => {
     logout(dispatch);
   };
-
   return (
     <>
+      {!user && (
+        <Text style={{textAlign: 'center', fontSize: 20, padding: 10}}>
+          Welcome to Business Tracker
+        </Text>
+      )}
       {user && (
         <>
           <View style={styles.body}>
@@ -62,14 +66,11 @@ const styles = StyleSheet.create({
   },
   body: {
     height: 20,
+    width: 300,
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingRight: 5,
     paddingLeft: 5,
-  },
-  right: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
   },
 });
 

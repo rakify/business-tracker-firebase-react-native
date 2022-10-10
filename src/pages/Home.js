@@ -3,6 +3,7 @@ import {Button, Pressable, StyleSheet, Text, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import Header from '../components/Header';
 import {getUserData, getUserData2} from '../redux/apiCalls';
+import EntryForm from './EntryForm';
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -10,12 +11,10 @@ const Home = () => {
   useEffect(() => {
     getUserData(dispatch, user.uid.stringValue);
   }, []);
+  console.log(user);
   return (
     <>
-      <Header />
-      <View style={styles.body}>
-        <Text>Welcome {user.username['stringValue']}</Text>
-      </View>
+      <EntryForm />
     </>
   );
 };

@@ -22,6 +22,7 @@ const Login = () => {
       .catch(error => {
         console.log(error);
         Alert.alert(
+          'Error',
           error.code === 'auth/invalid-email'
             ? 'Invalid email.'
             : error.code === 'auth/user-not-found'
@@ -29,6 +30,10 @@ const Login = () => {
             : error.code === 'auth/wrong-password'
             ? 'Wrong password.'
             : 'Network error.',
+          [],
+          {
+            cancelable: true,
+          },
         );
       });
   };

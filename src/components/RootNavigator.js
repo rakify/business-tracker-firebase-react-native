@@ -4,16 +4,11 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Home from '../pages/Home';
 import Login from '../pages/Login';
 import {useSelector} from 'react-redux';
-// import Admin from './../pages/Admin';
-// import Calculation from './../pages/Calculation';
 import LoadingScreen from './LoadingScreen';
 import Register from '../pages/Register';
-import UpdateUser from '../pages/UpdateUser';
 import Customers from '../pages/Customers';
 import Products from '../pages/Products';
-import {Settings} from '../pages/Settings';
-// import UpdateUser from '../pages/UpdateUser';
-// import UpdateKey from './../pages/UpdateKey';
+import Settings from '../pages/Settings';
 
 const Tab = createBottomTabNavigator();
 
@@ -24,8 +19,14 @@ const RootNavigator = () => {
     <NavigationContainer>
       <Tab.Navigator
         screenOptions={{
-          headerShown: true,
+          headerShown: user.currentUser,
           tabBarHideOnKeyboard: true,
+          tabBarIconStyle: {display: 'none'},
+          tabBarLabelPosition: 'beside-icon',
+          tabBarLabelStyle: {
+            fontWeight: '700',
+            fontSize: 15,
+          },
         }}>
         {!user.currentUser ? (
           <Tab.Group>
@@ -40,7 +41,7 @@ const RootNavigator = () => {
           </Tab.Group>
         ) : (
           <Tab.Group>
-            <Tab.Screen name="Home" component={Home} />
+            <Tab.Screen name="Cash Memo" component={Home} />
             <Tab.Screen name="Customers" component={Customers} />
             <Tab.Screen name="Products" component={Products} />
             <Tab.Screen name="Settings" component={Settings} />
