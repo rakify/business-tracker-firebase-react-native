@@ -91,12 +91,12 @@ const EntryForm = () => {
     setInputs(prev => ({...prev, finalCost: finalCost.toFixed()}));
   }, [inputs.commitionPercentage, inputs.cost]);
 
-  //with change in cost, previous reserve and todays reserve, update final reserve
+  //with change in finalCost, previous reserve and todays reserve, update final reserve
   useEffect(() => {
-    let totalCost = inputs.previousReserve - inputs.cost;
+    let totalCost = inputs.previousReserve - inputs.finalCost;
     let finalReserve = totalCost + parseInt(inputs.reserve);
     setInputs(prev => ({...prev, finalReserve: finalReserve}));
-  }, [inputs.cost, inputs.previousReserve, inputs.reserve]);
+  }, [inputs.finalCost, inputs.previousReserve, inputs.reserve]);
 
   return (
     <>
