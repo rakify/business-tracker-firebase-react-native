@@ -3,7 +3,7 @@ import {View, StyleSheet, Text, ScrollView, Alert} from 'react-native';
 import Button from '../utils/Button';
 import {useDispatch, useSelector} from 'react-redux';
 import AddNewProduct from '../components/AddNewProduct';
-import {updateUserData, updateUserProductsData} from '../redux/apiCalls';
+import {updateUserProductsData} from '../redux/apiCalls';
 
 const Products = () => {
   const dispatch = useDispatch();
@@ -49,42 +49,39 @@ const Products = () => {
   return (
     <>
       <ScrollView style={styles.container}>
-        <ScrollView
-          horizontal
-          style={styles.container}
-          contentContainerStyle={{
-            flexDirection: 'column',
-          }}>
-          {products === 0 && nowShowing ? (
-            <>
-              <View style={styles.currentlyShowingView}>
-                <Text style={styles.currentlyShowingTitle}>
-                  List of Products
-                </Text>
-                <Button
-                  style={styles.changeScreenButton}
-                  title="Add New"
-                  onPressFunction={nowShowingHandler}
-                />
-              </View>
+        {products === 0 && nowShowing ? (
+          <>
+            <View style={styles.currentlyShowingView}>
+              <Text style={styles.currentlyShowingTitle}>List of Products</Text>
+              <Button
+                style={styles.changeScreenButton}
+                title="Add New"
+                onPressFunction={nowShowingHandler}
+              />
+            </View>
 
-              <View>
-                <Text style={styles.emptyMessage}>No product added yet.</Text>
-              </View>
-            </>
-          ) : nowShowing ? (
-            <>
-              <View style={styles.currentlyShowingView}>
-                <Text style={styles.currentlyShowingTitle}>
-                  List of Products ({products.length})
-                </Text>
-                <Button
-                  style={styles.changeScreenButton}
-                  title="Add New"
-                  onPressFunction={nowShowingHandler}
-                />
-              </View>
-
+            <View>
+              <Text style={styles.emptyMessage}>No product added yet.</Text>
+            </View>
+          </>
+        ) : nowShowing ? (
+          <>
+            <View style={styles.currentlyShowingView}>
+              <Text style={styles.currentlyShowingTitle}>
+                List of Products ({products.length})
+              </Text>
+              <Button
+                style={styles.changeScreenButton}
+                title="Add New"
+                onPressFunction={nowShowingHandler}
+              />
+            </View>
+            <ScrollView
+              horizontal
+              style={styles.container}
+              contentContainerStyle={{
+                flexDirection: 'column',
+              }}>
               <View style={styles.TBODY}>
                 <View style={styles.TR}>
                   <View style={styles.TH}>
@@ -95,6 +92,9 @@ const Products = () => {
                   </View>
                   <View style={styles.TH}>
                     <Text style={styles.THtext}>Unit</Text>
+                  </View>
+                  <View style={styles.TH}>
+                    <Text style={styles.THtext}>Commition</Text>
                   </View>
                   <View style={styles.TH}>
                     <Text style={styles.THtext}>Note</Text>
@@ -109,18 +109,32 @@ const Products = () => {
                 <View key={i} style={styles.TBODY}>
                   <View style={styles.TR}>
                     <View style={styles.TD}>
-                      <Text>{item?.mapValue?.fields?.name?.stringValue}</Text>
-                    </View>
-                    <View style={styles.TD}>
-                      <Text style={{color: 'red'}}>
-                        {item?.mapValue?.fields?.price?.doubleValue}
+                      <Text style={styles.title}>
+                        {item?.mapValue?.fields?.name?.stringValue}
                       </Text>
                     </View>
                     <View style={styles.TD}>
-                      <Text>{item?.mapValue?.fields?.unit?.stringValue}</Text>
+                      <Text style={{color: 'red'}}>
+                        {item?.mapValue?.fields?.price?.integerValue}
+                      </Text>
                     </View>
                     <View style={styles.TD}>
-                      <Text>{item?.mapValue?.fields?.note?.stringValue}</Text>
+                      <Text style={styles.title}>
+                        {item?.mapValue?.fields?.unit?.stringValue}
+                      </Text>
+                    </View>
+                    <View style={styles.TD}>
+                      <Text style={styles.title}>
+                        {item?.mapValue?.fields?.acceptCommition
+                          ?.booleanValue === true
+                          ? 'Available'
+                          : 'Unavailable'}
+                      </Text>
+                    </View>
+                    <View style={styles.TD}>
+                      <Text style={styles.title}>
+                        {item?.mapValue?.fields?.note?.stringValue}
+                      </Text>
                     </View>
                     <Button
                       onPressFunction={() =>
@@ -135,10 +149,17 @@ const Products = () => {
                   </View>
                 </View>
               ))}
-            </>
-          ) : (
-            !nowShowing && (
-              <>
+            </ScrollView>
+          </>
+        ) : (
+          !nowShowing && (
+            <>
+              <ScrollView
+                horizontal
+                style={styles.container}
+                contentContainerStyle={{
+                  flexDirection: 'column',
+                }}>
                 <View style={styles.currentlyShowingView}>
                   <Text style={styles.currentlyShowingTitle}>
                     Add New Product
@@ -150,10 +171,10 @@ const Products = () => {
                   />
                 </View>
                 <AddNewProduct />
-              </>
-            )
-          )}
-        </ScrollView>
+              </ScrollView>
+            </>
+          )
+        )}
       </ScrollView>
     </>
   );
@@ -202,6 +223,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     alignItems: 'center',
     backgroundColor: '#f1f8ff',
+  },
+  title: {
+    width: '100%',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textAlign: 'center',
   },
   actionButton: {
     backgroundColor: '#DFF6FF',

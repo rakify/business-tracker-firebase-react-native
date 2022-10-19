@@ -42,7 +42,7 @@ const RootNavigator = () => {
         ) : (
           <Tab.Group>
             <Tab.Screen name="Cash Memo" component={Home} />
-            <Tab.Screen name="Customers" component={Customers} />
+            {/* <Tab.Screen name="Customers" component={Customers} /> */}
             <Tab.Screen name="Products" component={Products} />
             <Tab.Screen name="Settings" component={Settings} />
           </Tab.Group>

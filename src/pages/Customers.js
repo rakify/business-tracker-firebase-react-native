@@ -108,18 +108,24 @@ const Customers = () => {
               <View key={i} style={styles.TBODY}>
                 <View style={styles.TR}>
                   <View style={styles.TD}>
-                    <Text>{item?.mapValue?.fields?.name?.stringValue}</Text>
+                    <Text style={styles.title}>
+                      {item?.mapValue?.fields?.name?.stringValue}
+                    </Text>
                   </View>
                   <View style={styles.TD}>
-                    <Text>
+                    <Text style={styles.title}>
                       {item?.mapValue?.fields?.phoneNumber?.stringValue}
                     </Text>
                   </View>
                   <View style={styles.TD}>
-                    <Text>{item?.mapValue?.fields?.address?.stringValue}</Text>
+                    <Text style={styles.title}>
+                      {item?.mapValue?.fields?.address?.stringValue}
+                    </Text>
                   </View>
                   <View style={styles.TD}>
-                    <Text>{item?.mapValue?.fields?.note?.stringValue}</Text>
+                    <Text style={styles.title}>
+                      {item?.mapValue?.fields?.note?.stringValue}
+                    </Text>
                   </View>
                   <Button
                     onPressFunction={() =>
@@ -197,6 +203,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     alignItems: 'center',
     backgroundColor: '#f1f8ff',
+  },
+  title: {
+    width: '100%',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
   },
   actionButton: {
     backgroundColor: '#DFF6FF',

@@ -57,6 +57,11 @@ const Login = () => {
             onChangeText={setPassword}
             placeholderTextColor="green"
           />
+          <Button
+            title={showPassword ? '🔒' : '🔓'}
+            color="transparent"
+            onPress={() => setShowPassword(!showPassword)}
+          />
         </View>
 
         <Button

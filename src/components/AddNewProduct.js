@@ -1,8 +1,10 @@
+import CheckBox from '@react-native-community/checkbox';
 import React, {useState} from 'react';
 import {Alert, StyleSheet, Text, TextInput, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {updateUserData, updateUserProductsData} from '../redux/apiCalls';
 import Button from '../utils/Button';
+// import CheckBox from '@react-native-community/checkbox';
 
 const AddNewProduct = () => {
   const dispatch = useDispatch();
@@ -16,6 +18,7 @@ const AddNewProduct = () => {
     price: '',
     unit: '',
     note: '',
+    acceptCommition: false,
   });
 
   const handleChange = (name, value) => {
@@ -41,9 +44,10 @@ const AddNewProduct = () => {
           mapValue: {
             fields: {
               name: {stringValue: inputs.name},
-              price: {doubleValue: inputs.price},
+              price: {integerValue: inputs.price},
               unit: {stringValue: inputs.unit},
               note: {stringValue: inputs.note},
+              acceptCommition: {booleanValue: inputs.acceptCommition},
             },
           },
         },
@@ -64,42 +68,50 @@ const AddNewProduct = () => {
   return (
     <View style={styles.container}>
       <View style={styles.inputField}>
-        <Text style={styles.caption}>Product Name</Text>
         <TextInput
           style={styles.input}
           value={inputs.name}
           onChangeText={value => handleChange('name', value)}
           placeholderTextColor="green"
+          placeholder="Product Name"
         />
       </View>
       <View style={styles.inputField}>
-        <Text style={styles.caption}>Price</Text>
         <TextInput
           style={styles.input}
           value={inputs.price}
           onChangeText={value => handleChange('price', value)}
           placeholderTextColor="green"
           keyboardType="numeric"
+          placeholder="Price"
         />
       </View>
       <View style={styles.inputField}>
-        <Text style={styles.caption}>Unit</Text>
         <TextInput
           style={styles.input}
           value={inputs.unit}
           onChangeText={value => handleChange('unit', value)}
           placeholderTextColor="green"
+          placeholder="Unit"
         />
       </View>
 
       <View style={styles.inputField}>
-        <Text style={styles.caption}>Note</Text>
         <TextInput
           style={styles.input}
           value={inputs.note}
           onChangeText={value => handleChange('note', value)}
           placeholderTextColor="green"
+          placeholder="Note"
         />
+      </View>
+
+      <View style={styles.inputField}>
+        <CheckBox
+          value={inputs.acceptCommition}
+          onValueChange={value => handleChange('acceptCommition', value)}
+        />
+        <Text style={styles.caption}>Accept Commition</Text>
       </View>
 
       <Button
@@ -118,14 +130,14 @@ const styles = StyleSheet.create({
   },
   caption: {
     color: '#0f6a94',
-    marginRight: 20,
+    marginLeft: 5,
     fontWeight: 'bold',
-    fontSize: 20,
   },
   inputField: {
     marginBottom: 10,
     marginLeft: 20,
-    marginRight: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   input: {
     fontSize: 14,
