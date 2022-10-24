@@ -2,12 +2,10 @@ import CheckBox from '@react-native-community/checkbox';
 import React, {useState} from 'react';
 import {Alert, StyleSheet, Text, TextInput, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import {updateUserData, updateUserProductsData} from '../redux/apiCalls';
+import {updateUserProductsData} from '../redux/apiCalls';
 import Button from '../utils/Button';
-import uuid from 'react-native-uuid';
-// import CheckBox from '@react-native-community/checkbox';
 
-const AddNewProduct = () => {
+const EditProduct = ({item, id}) => {
   const dispatch = useDispatch();
   const user = useSelector(state => state.user.currentUser);
   const products =
@@ -16,13 +14,12 @@ const AddNewProduct = () => {
     ) || 0;
 
   const [inputs, setInputs] = useState({
-    id: '',
-    name: '',
-    price: '',
-    unit: '',
-    note: '',
-    acceptCommition: false,
-    priority: 0, // products will be sorted depending on this value
+    id: item?.mapValue?.fields?.id?.stringValue,
+    name: item?.mapValue?.fields?.name?.stringValue,
+    price: item?.mapValue?.fields?.price?.doubleValue,
+    unit: item?.mapValue?.fields?.unit?.stringValue,
+    note: item?.mapValue?.fields?.note?.stringValue,
+    acceptCommition: item?.mapValue?.fields?.acceptCommition?.booleanValue,
   });
 
   const handleChange = (name, value) => {
@@ -47,23 +44,24 @@ const AddNewProduct = () => {
         {
           mapValue: {
             fields: {
-              id: {stringValue: uuid.v4()},
+              id: {stringValue: inputs.id},
               name: {stringValue: inputs.name},
               price: {doubleValue: inputs.price},
               unit: {stringValue: inputs.unit},
               note: {stringValue: inputs.note},
-              priority: {integerValue: inputs.priority},
               acceptCommition: {booleanValue: inputs.acceptCommition},
             },
           },
         },
       ];
 
+      let updatedProducts = [...products];
+      updatedProducts.splice(id, 1);
       const updatedUser = {
         uid: {stringValue: user.uid.stringValue},
         products: {
           arrayValue: {
-            values: products ? [...products, ...newProduct] : [...newProduct],
+            values: [...updatedProducts, ...newProduct],
           },
         },
       };
@@ -85,10 +83,10 @@ const AddNewProduct = () => {
       <View style={styles.inputField}>
         <TextInput
           style={styles.input}
-          value={inputs.price}
+          value={inputs.price.toString()}
           onChangeText={value => handleChange('price', value)}
-          placeholderTextColor="green"
           keyboardType="numeric"
+          placeholderTextColor="green"
           placeholder="Price"
         />
       </View>
@@ -113,17 +111,6 @@ const AddNewProduct = () => {
       </View>
 
       <View style={styles.inputField}>
-        <TextInput
-          style={styles.input}
-          value={inputs.priority}
-          onChangeText={value => handleChange('priority', value)}
-          keyboardType="numeric"
-          placeholderTextColor="green"
-          placeholder="Priority"
-        />
-      </View>
-
-      <View style={styles.inputField}>
         <CheckBox
           value={inputs.acceptCommition}
           onValueChange={value => handleChange('acceptCommition', value)}
@@ -133,7 +120,7 @@ const AddNewProduct = () => {
 
       <Button
         style={{alignSelf: 'center'}}
-        title={'Add'}
+        title={'Update'}
         color="#1eb900"
         onPressFunction={handleSubmit}
       />
@@ -168,4 +155,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddNewProduct;
+export default EditProduct;

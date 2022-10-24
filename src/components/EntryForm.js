@@ -1,17 +1,7 @@
 import {useFocusEffect} from '@react-navigation/native';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-  RefreshControl,
-} from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
-import {getUserData} from '../redux/apiCalls';
-import Button from '../utils/Button';
-
+import {ScrollView, StyleSheet, Text, TextInput, View} from 'react-native';
+import {useSelector} from 'react-redux';
 const EntryForm = () => {
   const user = useSelector(state => state.user.currentUser);
   const products =
@@ -29,16 +19,16 @@ const EntryForm = () => {
     user: user.username['stringValue'],
     entryNo: 1, //if no entries set 1 or set first entries(sorted so) entryNo+1
     date: date,
-    costForWithCommition: 0, // todays total cost for commision based product
-    commitionPercentage: 0, // perchantage of discount
-    commitionValue: 0, // discount ammount
-    costAfterCommition: 0,
-    costForWithoutCommition: 0, // todays total cost for without commision based product
-    finalCost: 0, // costAfterCommition+costWithoutCommition
-    previousReserve: 0, // previous date final reserve
-    finalCost2: 0, //abs(previousReserve-finalCost)
-    reserve: 0, // todays reserve
-    finalReserve: 0, // (previousReserve-cost)+reserve
+    costForWithCommition: 0.0, // todays total cost for commision based product
+    commitionPercentage: 0.0, // perchantage of discount
+    commitionValue: 0.0, // discount ammount
+    costAfterCommition: 0.0,
+    costForWithoutCommition: 0.0, // todays total cost for without commision based product
+    finalCost: 0.0, // costAfterCommition+costWithoutCommition
+    previousReserve: 0.0, // previous date final reserve
+    finalCost2: 0.0, //abs(previousReserve-finalCost)
+    reserve: 0.0, // todays reserve
+    finalReserve: 0.0, // (previousReserve-cost)+reserve
     by: '', //buyer
   });
 
@@ -59,14 +49,14 @@ const EntryForm = () => {
       value !== '' &&
       setInputs(prev => ({
         ...prev,
-        [name]: parseInt(value),
+        [name]: parseFloat(value),
       }));
   };
 
   //set initialQuantity per product as 0
   let initialQuantity = {};
   for (let i = 0; i < products.length; i++) {
-    initialQuantity[products[i].mapValue.fields.name.stringValue] = 0;
+    initialQuantity[products[i]?.mapValue?.fields?.id?.stringValue] = 0;
   }
   // for product with commition
   const [quantity, setQuantity] = useState({...initialQuantity});
@@ -76,51 +66,53 @@ const EntryForm = () => {
   const [subtotal2, setSubtotal2] = useState({...initialQuantity});
 
   // Handle change in quantity and also update subtotal for commision based product
-  const handleQuantity = (valuePassed, price, name) => {
+  const handleQuantity = (valuePassed, price, id) => {
     let value = 0;
     if (valuePassed !== '' && !isNaN(valuePassed)) value = valuePassed;
+    let subtotal = value * price;
     setSubtotal(prev => {
-      return {...prev, [name]: value * price};
+      return {...prev, [id]: subtotal.toFixed(2)};
     });
     setQuantity(prev => {
-      return {...prev, [name]: value};
+      return {...prev, [id]: value};
     });
   };
 
   // Handle change in quantity and also update subtotal for without commision based product
-  const handleQuantity2 = (valuePassed, price, name) => {
+  const handleQuantity2 = (valuePassed, price, id) => {
     let value = 0;
     if (valuePassed !== '' && !isNaN(valuePassed)) value = valuePassed;
+    let subtotal = value * price;
     setSubtotal2(prev => {
-      return {...prev, [name]: value * price};
+      return {...prev, [id]: subtotal.toFixed(2)};
     });
     setQuantity2(prev => {
-      return {...prev, [name]: value};
+      return {...prev, [id]: value};
     });
   };
 
   //with change in subtotal, update total cost value for commision based product
   useEffect(() => {
-    let total = 0;
+    let total = 0.0;
     for (let item in subtotal) {
-      total += subtotal[item];
+      total += parseFloat(subtotal[item]);
     }
-    setInputs(prev => ({...prev, costForWithCommition: total}));
+    setInputs(prev => ({...prev, costForWithCommition: total.toFixed(2)}));
   }, [subtotal]);
 
   //with change in subtotal2, update total cost value for without commision product
   useEffect(() => {
     let total = 0;
     for (let item in subtotal2) {
-      total += subtotal2[item];
+      total += parseFloat(subtotal2[item]);
     }
-    setInputs(prev => ({...prev, costForWithoutCommition: total}));
+    setInputs(prev => ({...prev, costForWithoutCommition: total.toFixed(2)}));
   }, [subtotal2]);
 
   //with change in commition, update commition Value and cost after commition
   useEffect(() => {
-    let costAfterCommition = 0;
-    let commitionValue = 0;
+    let costAfterCommition = 0.0;
+    let commitionValue = 0.0;
     if (inputs.commitionPercentage !== 0)
       commitionValue =
         (inputs.commitionPercentage / 100.0) * inputs.costForWithCommition;
@@ -137,16 +129,15 @@ const EntryForm = () => {
     let finalCost =
       parseFloat(inputs.costAfterCommition) +
       parseFloat(inputs.costForWithoutCommition);
-    setInputs(prev => ({...prev, finalCost: finalCost}));
+    setInputs(prev => ({...prev, finalCost: finalCost.toFixed(2)}));
   }, [inputs.costAfterCommition, inputs.costForWithoutCommition]);
 
   //with change in finalCost, previous reserve and todays reserve, update final reserve, finalCost2
   useEffect(() => {
-    let finalCost2 =
-      -parseFloat(inputs.previousReserve) - parseFloat(inputs.finalCost);
+    let finalCost2 = -parseFloat(inputs.previousReserve) - inputs.finalCost;
     let finalReserve = parseFloat(inputs.reserve) + finalCost2;
-    setInputs(prev => ({...prev, finalReserve: finalReserve}));
-    setInputs(prev => ({...prev, finalCost2: finalCost2}));
+    setInputs(prev => ({...prev, finalReserve: finalReserve.toFixed(2)}));
+    setInputs(prev => ({...prev, finalCost2: finalCost2.toFixed(2)}));
   }, [inputs.finalCost, inputs.previousReserve, inputs.reserve]);
 
   let productWithoutCommition = products.filter(
@@ -232,12 +223,14 @@ const EntryForm = () => {
                   item?.mapValue?.fields?.acceptCommition?.booleanValue ===
                   true,
               )
-              .map((item, i) => (
-                <View key={i} style={styles.TBODY}>
+              .map(item => (
+                <View
+                  key={item?.mapValue?.fields?.id?.stringValue}
+                  style={styles.TBODY}>
                   <View style={styles.TR}>
                     <View style={styles.TD}>
                       <Text style={{color: 'red'}}>
-                        {item?.mapValue?.fields?.price?.integerValue}
+                        {item?.mapValue?.fields?.price?.doubleValue}
                       </Text>
                     </View>
                     <View style={styles.TD2}>
@@ -251,19 +244,21 @@ const EntryForm = () => {
                         style={styles.input}
                         placeholderTextColor="green"
                         placeholder="0"
-                        value={quantity[item.mapValue.fields.name.stringValue]}
+                        value={
+                          quantity[item?.mapValue?.fields?.id?.stringValue]
+                        }
                         onChangeText={value =>
                           handleQuantity(
                             value,
-                            item?.mapValue?.fields?.price?.integerValue,
-                            item?.mapValue?.fields?.name?.stringValue,
+                            item?.mapValue?.fields?.price?.doubleValue,
+                            item?.mapValue?.fields?.id?.stringValue,
                           )
                         }
                       />
                     </View>
                     <View style={styles.TD}>
                       <Text>
-                        {subtotal[item?.mapValue?.fields?.name?.stringValue]}৳
+                        {subtotal[item?.mapValue?.fields?.id?.stringValue]}৳
                       </Text>
                     </View>
                   </View>
@@ -308,9 +303,11 @@ const EntryForm = () => {
                   <View style={styles.calculationRow}>
                     <View style={styles.calculationData}></View>
                     <View style={styles.calculationData2}></View>
-                    <View style={styles.calculationData}></View>
                     <View style={styles.calculationData}>
-                      <Text>= {inputs.costAfterCommition}৳</Text>
+                      <Text>=</Text>
+                    </View>
+                    <View style={styles.calculationData}>
+                      <Text>{inputs.costAfterCommition}৳</Text>
                     </View>
                   </View>
                 </>
@@ -343,12 +340,14 @@ const EntryForm = () => {
                   item?.mapValue?.fields?.acceptCommition?.booleanValue !==
                   true,
               )
-              .map((item, i) => (
-                <View key={i} style={styles.TBODY}>
+              .map(item => (
+                <View
+                  key={item?.mapValue?.fields?.id?.stringValue}
+                  style={styles.TBODY}>
                   <View style={styles.TR}>
                     <View style={styles.TD}>
                       <Text style={{color: 'red'}}>
-                        {item?.mapValue?.fields?.price?.integerValue}
+                        {item?.mapValue?.fields?.price?.doubleValue}
                       </Text>
                     </View>
                     <View style={styles.TD2}>
@@ -362,19 +361,21 @@ const EntryForm = () => {
                         style={styles.input}
                         placeholderTextColor="green"
                         placeholder="0"
-                        value={quantity2[item.mapValue.fields.name.stringValue]}
+                        value={
+                          quantity2[item?.mapValue?.fields?.id?.stringValue]
+                        }
                         onChangeText={value =>
                           handleQuantity2(
                             value,
-                            item?.mapValue?.fields?.price?.integerValue,
-                            item?.mapValue?.fields?.name?.stringValue,
+                            item?.mapValue?.fields?.price?.doubleValue,
+                            item?.mapValue?.fields?.id?.stringValue,
                           )
                         }
                       />
                     </View>
                     <View style={styles.TD}>
                       <Text>
-                        {subtotal2[item?.mapValue?.fields?.name?.stringValue]}৳
+                        {subtotal2[item?.mapValue?.fields?.id?.stringValue]}৳
                       </Text>
                     </View>
                   </View>
@@ -385,11 +386,13 @@ const EntryForm = () => {
               {productWithoutCommition.length !== 0 && (
                 <>
                   <View style={styles.calculationRow}>
-                    <Text style={styles.calculationData}></Text>
+                    <View style={styles.calculationData}></View>
                     <View style={styles.calculationData2}></View>
-                    <Text style={styles.calculationData}></Text>
                     <View style={styles.calculationData}>
-                      <Text>= {inputs.costForWithoutCommition}৳</Text>
+                      <Text>=</Text>
+                    </View>
+                    <View style={styles.calculationData}>
+                      <Text>{inputs.costForWithoutCommition}৳</Text>
                     </View>
                   </View>
 
@@ -579,6 +582,7 @@ const styles = StyleSheet.create({
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
     overflow: 'hidden',
+    textAlign: 'center',
   },
   input: {
     height: 50,
