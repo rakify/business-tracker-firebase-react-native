@@ -197,24 +197,29 @@ const Products = () => {
           </>
         ) : nowShowing === 'Add' ? (
           <>
-            <ScrollView
-              horizontal
-              style={styles.container}
-              contentContainerStyle={{
-                flexDirection: 'column',
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={nowShowing === 'Add'}
+              onRequestClose={() => {
+                setNowShowing('List');
               }}>
-              <View style={styles.currentlyShowingView}>
-                <Text style={styles.currentlyShowingTitle}>
-                  Add New Product
-                </Text>
-                <Button
-                  style={styles.changeScreenButton}
-                  title="Go Back"
-                  onPressFunction={() => setNowShowing('List')}
-                />
+              <View style={styles.centeredView}>
+                <View style={styles.modalView}>
+                  <View style={styles.currentlyShowingView}>
+                    <Text style={styles.currentlyShowingTitle}>
+                      Add Product
+                    </Text>
+                    <Button
+                      style={styles.changeScreenButton}
+                      title="Go Back"
+                      onPressFunction={() => setNowShowing('List')}
+                    />
+                  </View>
+                  <AddNewProduct />
+                </View>
               </View>
-              <AddNewProduct />
-            </ScrollView>
+            </Modal>
           </>
         ) : (
           nowShowing === 'Edit' && (
@@ -320,7 +325,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   actionButton: {
-    backgroundColor: '#362A89',
+    backgroundColor: '#5F9DF7',
     width: 50,
     borderRadius: 10,
     borderWidth: 5,
@@ -337,17 +342,16 @@ const styles = StyleSheet.create({
   },
 
   centeredView: {
-    flex: 1,
+    height: '80%',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 22,
+    marginTop: 25,
   },
   modalView: {
     margin: 20,
     backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 35,
-    alignItems: 'center',
+    borderRadius: 0,
+    padding: 20,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,

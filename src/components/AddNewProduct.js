@@ -22,7 +22,6 @@ const AddNewProduct = () => {
     unit: '',
     note: '',
     acceptCommition: false,
-    priority: 0, // products will be sorted depending on this value
   });
 
   const handleChange = (name, value) => {
@@ -52,7 +51,6 @@ const AddNewProduct = () => {
               price: {doubleValue: inputs.price},
               unit: {stringValue: inputs.unit},
               note: {stringValue: inputs.note},
-              priority: {integerValue: inputs.priority},
               acceptCommition: {booleanValue: inputs.acceptCommition},
             },
           },
@@ -113,17 +111,6 @@ const AddNewProduct = () => {
       </View>
 
       <View style={styles.inputField}>
-        <TextInput
-          style={styles.input}
-          value={inputs.priority}
-          onChangeText={value => handleChange('priority', value)}
-          keyboardType="numeric"
-          placeholderTextColor="green"
-          placeholder="Priority"
-        />
-      </View>
-
-      <View style={styles.inputField}>
         <CheckBox
           value={inputs.acceptCommition}
           onValueChange={value => handleChange('acceptCommition', value)}
@@ -142,9 +129,7 @@ const AddNewProduct = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
+  container: {},
   caption: {
     color: '#0f6a94',
     marginLeft: 5,
@@ -158,7 +143,7 @@ const styles = StyleSheet.create({
   },
   input: {
     fontSize: 14,
-    width: 200,
+    width: 300,
     height: 45,
     paddingLeft: 10,
     paddingRight: 10,

@@ -129,9 +129,7 @@ const EditProduct = ({item, id}) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
+  container: {},
   caption: {
     color: '#0f6a94',
     marginLeft: 5,
@@ -145,7 +143,7 @@ const styles = StyleSheet.create({
   },
   input: {
     fontSize: 14,
-    width: 200,
+    width: 300,
     height: 45,
     paddingLeft: 10,
     paddingRight: 10,
