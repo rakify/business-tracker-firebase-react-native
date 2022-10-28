@@ -31,6 +31,21 @@ import {auth} from '../config/firebaseConfig';
 import {Alert} from 'react-native';
 const API_KEY = 'AIzaSyA0R6yc4I5Qf7szfOl0_MwJLR3DGFavieI';
 
+export const resetPassword = async email => {
+  const url = `https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=${API_KEY}`;
+  try {
+    const res = await axios.post(url, {
+      requestType: 'PASSWORD_RESET',
+      email: email,
+    });
+    console.log(res.data);
+    return res.status;
+  } catch (err) {
+    console.log(err.code);
+    return err.code;
+  }
+};
+
 export const createUserData = async user => {
   const url = `https://firestore.googleapis.com/v1/projects/business-33109/databases/(default)/documents/users/?documentId=${user.uid.stringValue}`;
   try {

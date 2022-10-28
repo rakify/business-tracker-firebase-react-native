@@ -5,7 +5,6 @@ import {useDispatch, useSelector} from 'react-redux';
 import {updateUserData, updateUserProductsData} from '../redux/apiCalls';
 import Button from '../utils/Button';
 import uuid from 'react-native-uuid';
-// import CheckBox from '@react-native-community/checkbox';
 
 const AddNewProduct = () => {
   const dispatch = useDispatch();

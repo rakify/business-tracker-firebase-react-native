@@ -47,6 +47,7 @@ const Register = () => {
               shopOfficePn: {stringValue: '+8801'},
               shopOtherPn: {stringValue: '+8801'},
               shopSignature: {stringValue: ''},
+              approved: {booleanValue: false}, // without approve being true user cant use the app
             }).then(
               Alert.alert(
                 '',

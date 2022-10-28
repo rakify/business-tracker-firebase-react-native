@@ -4,7 +4,7 @@ import {View, StyleSheet, TextInput, Alert, Text, Button} from 'react-native';
 import Header from '../components/Header';
 import {signInWithEmailAndPassword} from 'firebase/auth';
 import {auth} from '../config/firebaseConfig';
-import {getUserData, login} from '../redux/apiCalls';
+import {getUserData, login, resetPassword} from '../redux/apiCalls';
 
 const Login = () => {
   const user = useSelector(state => state.user);
@@ -13,6 +13,35 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(true);
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const forgotPassHandler = () => {
+    if (email === '')
+      Alert.alert('Please enter your email to reset password', '', [], {
+        cancelable: true,
+      });
+    else
+      resetPassword(email).then(res => {
+        res === 200 &&
+          Alert.alert(
+            '',
+            'We have sent an email with instruction on how to reset your password. Please check spam folders also.',
+            [],
+            {
+              cancelable: true,
+            },
+          );
+        res !== 200 &&
+          Alert.alert(
+            '',
+            'Could not reset. Please check if email address you provided is correct.',
+            [],
+            {
+              cancelable: true,
+            },
+          );
+      });
+  };
 
   const LoginHandler = () => {
     signInWithEmailAndPassword(auth, email, password)
@@ -69,6 +98,20 @@ const Login = () => {
           color="#1eb900"
           onPress={() => LoginHandler()}
         />
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginTop: 50,
+          }}>
+          <Text style={{marginRight: 5}}>Can't remember your password?</Text>
+          <Button
+            title="Reset Password"
+            color="black"
+            onPress={() => forgotPassHandler()}
+          />
+        </View>
       </View>
     </>
   );
